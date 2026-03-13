@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Intranet Portal | Internal Services Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066ff;
+            --secondary: #00d4ff;
+            --accent: #ff6b6b;
+            --dark: #0f1419;
+            --darker: #0a0e12;
+            --light: #f8f9fa;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1f2e 50%, var(--darker) 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            animation: gradientShift 15s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Header */
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.2);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-date {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .time-item {
+            background: rgba(0, 102, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .time-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Services Grid */
+        .services-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title i {
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.2);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-desc {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .service-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: gap 0.3s ease;
+        }
+
+        .service-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Quick Stats */
+        .stats-section {
+            margin-bottom: 3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.7s; }
+        .stat-card:nth-child(2) { animation-delay: 0.8s; }
+        .stat-card:nth-child(3) { animation-delay: 0.9s; }
+        .stat-card:nth-child(4) { animation-delay: 1s; }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        /* Announcements */
+        .announcements-section {
+            margin-bottom: 3rem;
+        }
+
+        .announcement-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--secondary);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInLeft 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .announcement-card:nth-child(1) { animation-delay: 1.1s; }
+        .announcement-card:nth-child(2) { animation-delay: 1.2s; }
+        .announcement-card:nth-child(3) { animation-delay: 1.3s; }
+
+        .announcement-date {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-text {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .quick-link-btn {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e0e0e0;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-link-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 255, 0.2));
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #808080;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #a0a0a0;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            color: #606060;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .welcome-section {
+                padding: 1.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            header {
+                padding: 1rem;
+            }
+
+            .time-date {
+                flex-direction: column;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--glass), rgba(20, 30, 50, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--accent);
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* Loading animation */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="logo-text">Enterprise Portal</div>
+        </div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#announcements">Announcements</a>
+            <a href="#support">Support</a>
+        </nav>
+        <div class="user-menu">
+            <div class="notification-bell" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <div class="notification-badge">3</div>
+            </div>
+            <div class="user-avatar" onclick="toggleUserMenu()">U</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section" id="home">
+            <div class="welcome-content">
+                <h1 class="welcome-title">Welcome Back, User! 👋</h1>
+                <p class="welcome-subtitle">Your central hub for all internal services and resources</p>
+                <div class="time-date">
+                    <div class="time-item">
+                        <div class="time-label">Current Time</div>
+                        <div class="time-value" id="current-time">00:00:00</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-label">Today's Date</div>
+                        <div class="time-value" id="current-date">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="stats-section">
+            <div class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Quick Statistics
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">2,547</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">98.7%</div>
+                    <div class="stat-label">System Uptime</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Support Tickets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">12.4GB</div>
+                    <div class="stat-label">Storage Used</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="services-section" id="services">
+            <div class="section-title">
+                <i class="fas fa-th"></i>
+                Core Services
+            </div>
+            <div class="services-grid">
+                <!-- Email Service -->
+                <div class="service-card" onclick="openServiceDetail('Email')">
+                    <div class="service-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="service-title">Email & Communication</div>
+                    <p class="service-desc">Access corporate email, teams chat, and video conferencing tools</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Document Management -->
+                <div class="service-card" onclick="openServiceDetail('Documents')">
+                    <div class="service-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="service-title">Document Management</div>
+                    <p class="service-desc">Cloud storage, collaboration tools, and version control for all documents</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- HR Services -->
+                <div class="service-card" onclick="openServiceDetail('HR')">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="service-title">HR & Payroll</div>
+                    <p class="service-desc">Employee self-service, benefits, payroll, and performance reviews</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- IT Support -->
+                <div class="service-card" onclick="openServiceDetail('IT')">
+                    <div class="service-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="service-title">IT Support Center</div>
+                    <p class="service-desc">Technical support, ticket system, knowledge base, and software tools</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Learning Platform -->
+                <div class="service-card" onclick="openServiceDetail('Training')">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="service-title">Learning Platform</div>
+                    <p class="service-desc">Online courses, certifications, training materials, and skill development</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Security Center -->
+                <div class="service-card" onclick="openServiceDetail('Security')">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="service-title">Security Center</div>
+                    <p class="service-desc">Password manager, security alerts, compliance, and access controls</p>
+                    <a href="#" class="service-link">
+                        Access <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Announcements -->
+        <section class="announcements-section" id="announcements">
+            <div class="section-title">
+                <i class="fas fa-bullhorn"></i>
+                Latest Announcements
+            </div>
+            <div class="announcement-card">
+                <div class="announcement-date">📢 March 13, 2026</div>
+                <div class="announcement-title">System Maintenance Scheduled</div>
+                <div class="announcement-text">System maintenance will occur on March 15 from 2:00 AM - 6:00 AM EST. Services will be unavailable during this time.</div>
+            </div>
+            <div class="announcement-card">
+                <div class="announcement-date">🎉 March 10, 2026</div>
+                <div class="announcement-title">New Enterprise Portal Launch</div>
+                <div class="announcement-text">Welcome to our completely redesigned intranet portal with improved performance and user experience!</div>
+            </div>
+            <div class="announcement-card">
+                <div class="announcement-date">📋 March 5, 2026</div>
+                <div class="announcement-title">Policy Update: Remote Work Guidelines</div>
+                <div class="announcement-text">New remote work policy has been updated. Please review the HR portal for detailed information on flexible work arrangements.</div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section style="margin-bottom: 3rem;">
+            <div class="section-title">
+                <i class="fas fa-link"></i>
+                Quick Links
+            </div>
+            <div class="quick-links">
+                <button class="quick-link-btn" onclick="showComingSoon()">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </button>
+                <button class="quick-link-btn" onclick="showComingSoon()">
+                    <i class="fas fa-calendar"></i> Calendar
+                </button>
+                <button class="quick-link-btn" onclick="showComingSoon()">
+                    <i class="fas fa-tasks"></i> Tasks
+                </button>
+                <button class="quick-link-btn" onclick="showComingSoon()">
+                    <i class="fas fa-folder"></i> My Files
+                </button>
+                <button class="quick-link-btn" onclick="showComingSoon()">
+                    <i class="fas fa-cogs"></i> Settings
+                </button>
+                <button class="quick-link-btn" onclick="openFeedbackModal()">
+                    <i class="fas fa-comment"></i> Send Feedback
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About</h3>
+                <a href="#"><i class="fas fa-info-circle"></i> About Portal</a>
+                <a href="#"><i class="fas fa-file"></i> Documentation</a>
+                <a href="#"><i class="fas fa-question"></i> FAQ</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#"><i class="fas fa-envelope"></i> Contact Support</a>
+                <a href="#"><i class="fas fa-ticket-alt"></i> Submit Ticket</a>
+                <a href="#"><i class="fas fa-phone"></i> Call: +1-800-SUPPORT</a>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="#"><i class="fas fa-book"></i> Knowledge Base</a>
+                <a href="#"><i class="fas fa-download"></i> Downloads</a>
+                <a href="#"><i class="fas fa-shield-alt"></i> Security</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Enterprise Corporation. All rights reserved. | <a href="#" style="color: #a0a0a0; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #a0a0a0; text-decoration: none;">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <!-- Modal for Service Details -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Service Details</h2>
+                <button class="close-btn" onclick="closeServiceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalDescription">Service description will appear here.</p>
+                <div style="margin-top: 1.5rem;">
+                    <h3 style="color: #e0e0e0; margin-bottom: 1rem;">Features:</h3>
+                    <ul id="modalFeatures" style="list-style: none; color: #a0a0a0;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--secondary); margin-right: 0.5rem;"></i>Feature 1</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeServiceModal()">Close</button>
+                <button class="btn btn-primary">Launch Service</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Feedback -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Send Feedback</h2>
+                <button class="close-btn" onclick="closeFeedbackModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your.email@company.com">
+                </div>
+                <div class="form-group">
+                    <label>Feedback Type</label>
+                    <select style="width: 100%; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #e0e0e0; font-family: inherit; cursor: pointer;">
+                        <option style="background: #1a1f2e; color: #e0e0e0;">Bug Report</option>
+                        <option style="background: #1a1f2e; color: #e0e0e0;">Feature Request</option>
+                        <option style="background: #1a1f2e; color: #e0e0e0;">General Feedback</option>
+                        <option style="background: #1a1f2e; color: #e0e0e0;">Compliment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea placeholder="Share your feedback..." style="resize: vertical; min-height: 120px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeFeedbackModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Coming Soon</h2>
+                <button class="close-btn" onclick="closeComingSoonModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                <p style="color: #a0a0a0; margin-bottom: 1rem;">This feature is under development and will be available soon!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeComingSoonModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update time and date
+        function updateTimeDate() {
+            const now = new Date();
+            
+            // Format time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        updateTimeDate();
+        setInterval(updateTimeDate, 1000);
+
+        // Service Details Modal
+        const serviceDetails = {
+            'Email': {
+                description: 'Secure corporate email and communication platform with advanced features.',
+                features: ['Unlimited Storage', 'Calendar Integration', 'Video Conferencing', 'Shared Calendars', 'Mobile Access', '24/7 Support']
+            },
+            'Documents': {
+                description: 'Cloud-based document management with real-time collaboration.',
+                features: ['Real-time Collaboration', 'Version Control', 'Advanced Sharing', 'Full-text Search', 'Comments & Mentions', 'Mobile App']
+            },
+            'HR': {
+                description: 'Complete HR management system for employees and managers.',
+                features: ['Leave Management', 'Performance Reviews', 'Salary Slip Access', 'Benefits Info', 'Employee Directory', 'Policy Documents']
+            },
+            'IT': {
+                description: 'Technical support and IT service management.',
+                features: ['Ticket Support', 'Remote Assistance', 'Knowledge Base', 'Software Requests', 'Asset Management', 'Hardware Support']
+            },
+            'Training': {
+                description: 'Comprehensive learning and development platform.',
+                features: ['Online Courses', 'Certifications', 'Video Tutorials', 'Progress Tracking', 'Certificates', 'Skill Assessments']
+            },
+            'Security': {
+                description: 'Enterprise security tools and compliance management.',
+                features: ['Password Manager', 'Multi-Factor Auth', 'Security Alerts', 'Compliance Reports', 'Access Logs', 'Vulnerability Scanner']
+            }
+        };
+
+        function openServiceDetail(service) {
+            const modal = document.getElementById('serviceModal');
+            const details = serviceDetails[service];
+            
+            document.getElementById('modalTitle').textContent = service + ' Service';
+            document.getElementById('modalDescription').textContent = details.description;
+            
+            const featuresList = document.getElementById('modalFeatures');
+            featuresList.innerHTML = '';
+            details.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.style.marginBottom = '0.5rem';
+                li.innerHTML = `<i class="fas fa-check" style="color: var(--secondary); margin-right: 0.5rem;"></i>${feature}`;
+                featuresList.appendChild(li);
+            });
+            
+            modal.classList.add('active');
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+        }
+
+        // Feedback Modal
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('active');
+        }
+
+        function submitFeedback() {
+            alert('Thank you for your feedback! It has been submitted successfully.');
+            closeFeedbackModal();
+        }
+
+        // Coming Soon Modal
+        function showComingSoon() {
+            document.getElementById('comingSoonModal').classList.add('active');
+        }
+
+        function closeComingSoonModal() {
+            document.getElementById('comingSoonModal').classList.remove('active');
+        }
+
+        // Toggle notifications (placeholder)
+        function toggleNotifications() {
+            alert('You have 3 new notifications:\n\n1. System maintenance scheduled\n2. New HR policy update\n3. Your support ticket #1234 was updated');
+        }
+
+        // Toggle user menu (placeholder)
+        function toggleUserMenu() {
+            alert('User Menu:\n\nJohn Doe\nAccount Settings\nProfile\nLogout');
+        }
+
+        // Close modals on outside click
+        window.addEventListener('click', function(event) {
+            const serviceModal = document.getElementById('serviceModal');
+            const feedbackModal = document.getElementById('feedbackModal');
+            const comingSoonModal = document.getElementById('comingSoonModal');
+            
+            if (event.target === serviceModal) serviceModal.classList.remove('active');
+            if (event.target === feedbackModal) feedbackModal.classList.remove('active');
+            if (event.target === comingSoonModal) comingSoonModal.classList.remove('active');
+        });
+
+        // Add smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        console.log('🎉 Enterprise Portal Loaded Successfully!');
+        console.log('Hosted on GitHub Pages - Zero server maintenance required!');
+    </script>
+</body>
+</html>
